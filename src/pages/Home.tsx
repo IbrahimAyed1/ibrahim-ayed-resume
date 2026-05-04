@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { db, missingFirebaseConfig } from '@/lib/firebase'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { getFirestoreDb, isFirebaseConfigured, missingFirebaseConfig } from '@/lib/firebase'
 import {
   Menu,
   X,
@@ -110,10 +109,18 @@ function Navbar() {
           </div>
 
           <button
+            type="button"
             className="lg:hidden text-white p-2"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? (
+              <X className="w-6 h-6" aria-hidden="true" />
+            ) : (
+              <Menu className="w-6 h-6" aria-hidden="true" />
+            )}
           </button>
         </div>
       </div>
@@ -121,6 +128,7 @@ function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -167,7 +175,7 @@ function Hero() {
         >
           <motion.div variants={fadeInUp}>
             <Badge className="mb-6 bg-white/5 text-[#E06C4F] border-[#E06C4F]/30 hover:bg-white/10 px-4 py-1.5 text-sm">
-              <Sparkles className="w-3.5 h-3.5 mr-1.5" /> Smart Digital Solutions
+              <Sparkles className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" /> Web Developer in Muscat, Oman
             </Badge>
           </motion.div>
 
@@ -180,10 +188,11 @@ function Hero() {
 
           <motion.p
             variants={fadeInUp}
-            className="mt-6 text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
+            className="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
           >
-            I build websites, web apps, e-commerce stores, booking systems, and
-            business tools that help teams work smarter and move faster.
+            Freelance web developer based in Muscat. I build websites, web apps,
+            e-commerce stores, booking systems, and business tools for businesses
+            in Oman and worldwide.
           </motion.p>
 
           <motion.div
@@ -206,7 +215,7 @@ function Hero() {
 
           <motion.div
             variants={fadeInUp}
-            className="mt-16 flex items-center justify-center gap-8 text-gray-500 text-sm"
+            className="mt-16 flex items-center justify-center gap-8 text-gray-400 text-sm"
           >
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-[#E06C4F]" /> Based in Muscat, building worldwide
@@ -538,7 +547,7 @@ function TestimonialsSection() {
                   <p className="text-gray-300 leading-relaxed mb-6">"{t.text}"</p>
                   <div>
                     <div className="font-semibold text-white">{t.name}</div>
-                    <div className="text-sm text-gray-500">{t.role}</div>
+                    <div className="text-sm text-gray-400">{t.role}</div>
                   </div>
                 </CardContent>
               </Card>
@@ -617,7 +626,7 @@ function PricingSection() {
                 <CardContent className="p-8">
                   <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
                   {/* <div className="mt-4 mb-2">
-                    <span className="text-sm text-gray-500">From</span>
+                    <span className="text-sm text-gray-400">From</span>
                     <div>
                       <span className="text-4xl font-bold text-white">{plan.price}</span>
                       <span className="text-gray-400 ml-1">OMR</span>
@@ -699,7 +708,7 @@ function FAQSection() {
                   {openIndex === i ? (
                     <ChevronUp className="w-5 h-5 text-[#E06C4F] shrink-0" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-500 shrink-0" />
+                    <ChevronDown className="w-5 h-5 text-gray-400 shrink-0" />
                   )}
                 </button>
                 <AnimatePresence>
@@ -743,7 +752,7 @@ function ContactSection() {
     event.preventDefault()
     setStatus(null)
 
-    if (!db) {
+    if (!isFirebaseConfigured) {
       setStatus({
         type: 'error',
         message: `Firebase is not configured yet. Add these Vite env values: ${missingFirebaseConfig.join(', ')}.`,
@@ -754,6 +763,17 @@ function ContactSection() {
     setIsSubmitting(true)
 
     try {
+      // Dynamically import Firestore on first form submit, keeping it out of
+      // the initial JS bundle. Subsequent submits reuse the cached modules.
+      const [db, { addDoc, collection, serverTimestamp }] = await Promise.all([
+        getFirestoreDb(),
+        import('firebase/firestore'),
+      ])
+
+      if (!db) {
+        throw new Error('Firestore is unavailable')
+      }
+
       await addDoc(collection(db, 'contactMessages'), {
         ...formData,
         email: formData.email.trim().toLowerCase(),
@@ -818,7 +838,7 @@ function ContactSection() {
                     <Phone className="w-5 h-5 text-[#E06C4F]" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">WhatsApp / Phone</div>
+                    <div className="text-sm text-gray-400">WhatsApp / Phone</div>
                     <a href="tel:+96890667053" className="text-white hover:text-[#E06C4F] transition-colors">
                       +968 90667053
                     </a>
@@ -829,7 +849,7 @@ function ContactSection() {
                     <Mail className="w-5 h-5 text-[#E06C4F]" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Email</div>
+                    <div className="text-sm text-gray-400">Email</div>
                     <a href="mailto:ibrahim@ibrahimayed.com" className="text-white hover:text-[#E06C4F] transition-colors">
                       ibrahim@ibrahimayed.com
                     </a>
@@ -840,7 +860,7 @@ function ContactSection() {
                     <MapPin className="w-5 h-5 text-[#E06C4F]" />
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Location</div>
+                    <div className="text-sm text-gray-400">Location</div>
                     <div className="text-white">Muscat, available worldwide</div>
                   </div>
                 </div>
@@ -872,45 +892,54 @@ function ContactSection() {
           >
             <Card className="bg-[#14141E] border-white/5">
               <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-5" aria-labelledby="contact-form-heading">
+                  <h3 id="contact-form-heading" className="sr-only">Contact form</h3>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1.5">Name</label>
+                      <label htmlFor="contact-name" className="block text-sm text-gray-300 mb-1.5">Name</label>
                       <Input
+                        id="contact-name"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Your name"
                         required
-                        className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-[#E06C4F]"
+                        autoComplete="name"
+                        className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#E06C4F]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-400 mb-1.5">Business Name</label>
+                      <label htmlFor="contact-business" className="block text-sm text-gray-300 mb-1.5">Business Name</label>
                       <Input
+                        id="contact-business"
                         name="businessName"
                         value={formData.businessName}
                         onChange={handleInputChange}
                         placeholder="Your business"
-                        className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-[#E06C4F]"
+                        autoComplete="organization"
+                        className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#E06C4F]"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1.5">Email</label>
+                    <label htmlFor="contact-email" className="block text-sm text-gray-300 mb-1.5">Email</label>
                     <Input
+                      id="contact-email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       type="email"
                       placeholder="you@business.com"
                       required
-                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-[#E06C4F]"
+                      autoComplete="email"
+                      inputMode="email"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#E06C4F]"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1.5">Service Interested In</label>
+                    <label htmlFor="contact-service" className="block text-sm text-gray-300 mb-1.5">Service Interested In</label>
                     <select
+                      id="contact-service"
                       name="service"
                       value={formData.service}
                       onChange={handleInputChange}
@@ -923,18 +952,21 @@ function ContactSection() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1.5">Message</label>
+                    <label htmlFor="contact-message" className="block text-sm text-gray-300 mb-1.5">Message</label>
                     <Textarea
+                      id="contact-message"
                       name="message"
                       value={formData.message}
                       onChange={handleInputChange}
                       placeholder="Tell me about your business and what you need..."
                       required
-                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-[#E06C4F] min-h-[120px]"
+                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#E06C4F] min-h-[120px]"
                     />
                   </div>
                   {status && (
                     <p
+                      role="status"
+                      aria-live="polite"
                       className={`text-sm ${
                         status.type === 'success' ? 'text-green-400' : 'text-red-400'
                       }`}
@@ -979,7 +1011,7 @@ function Footer() {
             <a href="#contact" className="hover:text-[#E06C4F] transition-colors">Contact</a>
           </div>
 
-          <div className="text-gray-500 text-sm">
+          <div className="text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} Ibrahim Ayed. All rights reserved.
           </div>
         </div>

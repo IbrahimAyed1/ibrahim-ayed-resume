@@ -3,60 +3,165 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Digital Solutions for Growing Businesses | Ibrahim Ayed</title>
+    <title>Web Developer in Muscat, Oman | Websites, E-commerce & Booking Systems — Ibrahim Ayed</title>
     <meta
       name="description"
-      content="Ibrahim Ayed builds smart digital solutions, including websites, web apps, e-commerce stores, booking systems, and business tools that help teams work better and grow."
+      content="Ibrahim Ayed — freelance web developer based in Muscat, Oman. I build custom websites, web apps, e-commerce stores, and booking systems for businesses in Oman and worldwide."
     />
-    <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="web developer Muscat, web developer Oman, web design Oman, e-commerce Oman, booking system Oman, freelance developer Muscat" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#0A0A0F" />
     <link rel="canonical" href="https://ibrahimayed.com/" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Performance: preconnect to Firestore so the contact form connects faster -->
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://firebaseinstallations.googleapis.com" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://ibrahimayed.com/" />
-    <meta property="og:title" content="Smart Digital Solutions for Growing Businesses | Ibrahim Ayed" />
+    <meta property="og:site_name" content="Ibrahim Ayed" />
+    <meta property="og:title" content="Web Developer in Muscat, Oman | Ibrahim Ayed" />
     <meta
       property="og:description"
-      content="Websites, web apps, e-commerce stores, booking systems, and business tools built to help growing businesses move faster."
+      content="Custom websites, web apps, e-commerce stores, and booking systems built for businesses in Oman and worldwide."
     />
-    <meta property="og:image" content="https://ibrahimayed.com/og-image.svg" />
+    <meta property="og:image" content="https://ibrahimayed.com/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ibrahim Ayed — Smart Digital Solutions for Growing Businesses" />
+    <meta property="og:image:secure_url" content="https://ibrahimayed.com/og-image.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Smart Digital Solutions for Growing Businesses | Ibrahim Ayed" />
+    <meta name="twitter:title" content="Web Developer in Muscat, Oman | Ibrahim Ayed" />
     <meta
       name="twitter:description"
-      content="Websites, web apps, e-commerce stores, booking systems, and business tools built to help growing businesses move faster."
+      content="Custom websites, web apps, e-commerce stores, and booking systems built for businesses in Oman and worldwide."
     />
-    <meta name="twitter:image" content="https://ibrahimayed.com/og-image.svg" />
+    <meta name="twitter:image" content="https://ibrahimayed.com/og-image.png" />
+    <meta name="twitter:image:alt" content="Ibrahim Ayed — Smart Digital Solutions for Growing Businesses" />
 
+    <!-- LocalBusiness schema (replaces ProfessionalService for better local SEO) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
+        "@type": "LocalBusiness",
+        "@id": "https://ibrahimayed.com/#business",
         "name": "Ibrahim Ayed",
+        "alternateName": "Ibrahim Ayed — Web Developer",
         "url": "https://ibrahimayed.com/",
-        "image": "https://ibrahimayed.com/og-image.svg",
+        "image": "https://ibrahimayed.com/og-image.png",
+        "logo": "https://ibrahimayed.com/favicon.svg",
         "email": "ibrahim@ibrahimayed.com",
         "telephone": "+96890667053",
+        "priceRange": "OMR 200 - OMR 700+",
+        "description": "Freelance web developer based in Muscat, Oman. Specializes in custom websites, web apps, e-commerce stores, and booking systems for growing businesses.",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Muscat",
+          "addressRegion": "Muscat Governorate",
           "addressCountry": "OM"
         },
         "areaServed": [
-          {
-            "@type": "Place",
-            "name": "Worldwide"
-          }
+          { "@type": "Country", "name": "Oman" },
+          { "@type": "Country", "name": "United Arab Emirates" },
+          { "@type": "Country", "name": "Saudi Arabia" },
+          { "@type": "Place", "name": "Worldwide" }
         ],
-        "serviceType": [
-          "Smart digital solutions",
-          "Website development",
-          "Web application development",
-          "E-commerce website development",
-          "Booking system development",
-          "Business automation"
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Sunday","Monday","Tuesday","Wednesday","Thursday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        },
+        "knowsAbout": [
+          "Web development",
+          "E-commerce development",
+          "Booking systems",
+          "Business automation",
+          "React",
+          "TypeScript",
+          "Firebase"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Business Website / Web App Development",
+                "description": "Professional, fast, and mobile-friendly websites and web apps for growing businesses."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "E-Commerce Store Development",
+                "description": "Online stores with payment integration, product management, and WhatsApp ordering."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Booking System Development",
+                "description": "Custom booking systems with real-time availability, SMS/email confirmations, and admin dashboards."
+              }
+            }
+          ]
+        }
+      }
+    </script>
+
+    <!-- FAQPage schema (matches the FAQ section in the page) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "I do not have a domain or hosting. Can you help?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. I handle the technical setup including domain registration, hosting, and SSL certificate. You do not need to worry about any of that."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does it take to build a digital solution?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A Starter solution typically takes 1-2 weeks. Business and Growth packages take 3-4 weeks depending on features. I keep you updated throughout."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I update the solution myself after it is built?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. I build with easy-to-manage systems. I will also give you a short training session so you can update text, images, and products on your own."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you offer payment in installments?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. For Business and Growth packages, you can pay 50% upfront and 50% upon completion."
+            }
+          }
         ]
       }
     </script>

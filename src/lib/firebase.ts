@@ -1,5 +1,8 @@
-import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+// Lazy-loaded Firebase. The config is read at module load (cheap), but the
+// actual Firebase SDK is only imported the first time getFirestoreDb() is
+// called. Keeps Firebase out of the initial JS bundle.
+
+import type { Firestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -26,8 +29,23 @@ export const missingFirebaseConfig = requiredConfigKeys.filter(
 
 export const isFirebaseConfigured = missingFirebaseConfig.length === 0
 
-export const firebaseApp = isFirebaseConfigured
-  ? initializeApp(firebaseConfig)
-  : undefined
+let dbPromise: Promise<Firestore | undefined> | null = null
 
-export const db = firebaseApp ? getFirestore(firebaseApp) : undefined
+/**
+ * Lazily initialize Firebase + Firestore on first call. Returns undefined if
+ * the Firebase env vars are missing. Subsequent calls reuse the same instance.
+ */
+export function getFirestoreDb(): Promise<Firestore | undefined> {
+  if (!isFirebaseConfigured) return Promise.resolve(undefined)
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      const [{ initializeApp }, { getFirestore }] = await Promise.all([
+        import('firebase/app'),
+        import('firebase/firestore'),
+      ])
+      const app = initializeApp(firebaseConfig)
+      return getFirestore(app)
+    })()
+  }
+  return dbPromise
+}
