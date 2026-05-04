@@ -1,0 +1,15 @@
+# This workflow is intentionally disabled.
+# Deployment is handled by Cloudflare Pages, which auto-builds on push to main.
+# Kept as a stub so the file path exists; the workflow never triggers.
+name: Disabled (Cloudflare Pages handles deploys)
+
+on:
+  workflow_dispatch:
+    # Manual-only. No push/pull_request triggers.
+
+jobs:
+  noop:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "This workflow is disabled. Cloudflare Pages handles deploys."'
